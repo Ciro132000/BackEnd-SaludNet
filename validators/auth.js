@@ -13,6 +13,10 @@ const validatorRegister = [
 
     check("userName").exists().notEmpty().isLength({min:3, max:99}),
 
+    check("is_active").exists().notEmpty().isBoolean(),
+
+    check("is_admin").exists().notEmpty().isBoolean(),
+
     (req, res, next) => {
         return validateResults(req, res, next);
     }
