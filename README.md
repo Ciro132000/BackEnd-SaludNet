@@ -7,10 +7,13 @@ crear db:
 npx sequelize-cli db:create
 
 crear model:
-npx sequelize-cli model:generate --name User --attributes firstName:string, lastNmae:string, email:string
+npx sequelize-cli model:generate --name User --attributes firstName:string,lastNmae:string,email:string
 
 Ejecutar migraciones:
 npx sequelize-cli db:migrate
+
+Quitar todas las migraciones:
+npx sequelize-cli db:migrate:undo:all
 
 Crear seeder:
 npx sequelize-cli seed:generate --name demo-user
