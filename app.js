@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const { dbConnectMySql } = require('./config/db')
 const app = express();
@@ -8,6 +9,7 @@ const app = express();
 /************* */
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 app.use("/storage",express.static('storage'));
 
