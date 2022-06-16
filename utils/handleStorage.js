@@ -12,10 +12,10 @@ const storage = multer.diskStorage({
 
 
         if(file.fieldname === "image"){
-            const pathStorage = `${__dirname}/../storage/users/user-${user_id}/img-perfil`;
+            const pathStorage = `./storage/users/user-${user_id}/img-perfil`;
             cb(null, pathStorage)
         }else if(file.fieldname === "image_header"){
-            const pathStorage = `${__dirname}/../storage/users/user-${user_id}/img-portada`;
+            const pathStorage = `./storage/users/user-${user_id}/img-portada`;
             cb(null, pathStorage)
         }
 

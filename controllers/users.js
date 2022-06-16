@@ -50,13 +50,13 @@ const registerProfile = async(req,res) =>{
         dataSend.image_header=`/storage/img-default/portada.jpg`
     }else if(!req.files.image && req.files.image_header){
         dataSend.image=`/storage/img-default/perfil.png`
-        dataSend.image_header=`/storage/users/user-${user_id}/img-portada/portada-user-${user_id}.${image_header[0].originalname.split('.').pop()}`
+        dataSend.image_header=`/storage/users/user-${user_id}/img-portada/portada-user-${user_id}.${req.files.image_header[0].originalname.split('.').pop()}`
     }else if(!req.files.image_header && req.files.image){
         dataSend.image_header=`/storage/img-default/portada.jpg`
-        dataSend.image=`/storage/users/user-${user_id}/img-portada/portada-user-${user_id}.${image[0].originalname.split('.').pop()}`
+        dataSend.image=`/storage/users/user-${user_id}/img-portada/portada-user-${user_id}.${req.files.image[0].originalname.split('.').pop()}`
     }else{
-        dataSend.image_header=`/storage/users/user-${user_id}/img-portada/portada-user-${user_id}.${image_header[0].originalname.split('.').pop()}`
-        dataSend.image=`/storage/users/user-${user_id}/img-portada/portada-user-${user_id}.${image[0].originalname.split('.').pop()}`
+        dataSend.image_header=`/storage/users/user-${user_id}/img-portada/portada-user-${user_id}.${req.files.image_header[0].originalname.split('.').pop()}`
+        dataSend.image=`/storage/users/user-${user_id}/img-portada/portada-user-${user_id}.${req.files.image[0].originalname.split('.').pop()}`
     }
 
     const dataUser = await profileModel.create(dataSend);
