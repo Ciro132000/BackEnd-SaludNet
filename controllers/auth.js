@@ -21,11 +21,42 @@ const registerCtrl = async (req,res) => {
             user:dataUser,
         }
         
-        fs.mkdirSync(`./storage/users/user-${dataUser.id}`,{recursive:true});
-        fs.mkdirSync(`./storage/users/user-${dataUser.id}/img-perfil`,{recursive:true});
-        fs.mkdirSync(`./storage/users/user-${dataUser.id}/img-portada`,{recursive:true});
-        fs.mkdirSync(`./storage/users/user-${dataUser.id}/img-posts`,{recursive:true});
-        fs.mkdirSync(`./storage/users/user-${dataUser.id}/img-messages`,{recursive:true});
+
+        fs.mkdir(`../storage/users/user-${dataUser.id}`,{recursive:true}, (err) => {
+            if (err) {
+              return console.error(err);
+            }
+            console.log('Directory main created successfully!');
+        });
+
+        fs.mkdir(`../storage/users/user-${dataUser.id}/img-perfil`,{recursive:true}, (err) => {
+            if (err) {
+              return console.error(err);
+            }
+            console.log('Directory perf created successfully!');
+        });
+
+        fs.mkdir(`../storage/users/user-${dataUser.id}/img-portada`,{recursive:true}, (err) => {
+            if (err) {
+              return console.error(err);
+            }
+            console.log('Directory port created successfully!');
+        });
+
+        fs.mkdir(`../storage/users/user-${dataUser.id}/img-posts`,{recursive:true}, (err) => {
+            if (err) {
+              return console.error(err);
+            }
+            console.log('Directory posts created successfully!');
+        });
+
+        fs.mkdir(`../storage/users/user-${dataUser.id}/img-messages`,{recursive:true}, (err) => {
+            if (err) {
+              return console.error(err);
+            }
+            console.log('Directory msm created successfully!');
+        });
+
 
         res.send({data})
     
