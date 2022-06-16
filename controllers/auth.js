@@ -1,4 +1,5 @@
 const { matchedData } = require('express-validator');
+const fs = require('fs')
 
 const { handleHttpError } = require('../utils/handleError')
 const { encrypt, compare } = require('../utils/handlePassword');
@@ -19,7 +20,13 @@ const registerCtrl = async (req,res) => {
             token: await tokenSign(dataUser),
             user:dataUser,
         }
-    
+        
+        fs.mkdirSync(`./storage/users/user-${dataUser.id}`,{recursive:true});
+        fs.mkdirSync(`./storage/users/user-${dataUser.id}/img-perfil`,{recursive:true});
+        fs.mkdirSync(`./storage/users/user-${dataUser.id}/img-portada`,{recursive:true});
+        fs.mkdirSync(`./storage/users/user-${dataUser.id}/img-posts`,{recursive:true});
+        fs.mkdirSync(`./storage/users/user-${dataUser.id}/img-messages`,{recursive:true});
+
         res.send({data})
     
     }catch(e){
@@ -56,8 +63,9 @@ const loginCtrl = async (req,res) => {
             token: await tokenSign(user),
             user
         }
-        
+
         res.send({data});
+
 
     } catch (e) {
         handleHttpError(res, "ERROR_LOGIN_USER");
