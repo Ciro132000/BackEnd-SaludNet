@@ -46,17 +46,17 @@ const registerProfile = async(req,res) =>{
     }
 
     if(!req.files.image_header && !req.files.image){
-        dataSend.image=`${process.env.PUBLIC_URL}/storage/img-default/perfil.png`
-        dataSend.image_header=`${process.env.PUBLIC_URL}/storage/img-default/portada.jpg`
+        dataSend.image=`/storage/img-default/perfil.png`
+        dataSend.image_header=`/storage/img-default/portada.jpg`
     }else if(!req.files.image && req.files.image_header){
-        dataSend.image=`${process.env.PUBLIC_URL}/storage/img-default/perfil.png`
-        dataSend.image_header=`${process.env.PUBLIC_URL}/storage/users/${user_id}/img-portada/portada-user-${user_id}.${image_header[0].originalname.split('.').pop()}`
+        dataSend.image=`/storage/img-default/perfil.png`
+        dataSend.image_header=`/storage/users/user-${user_id}/img-portada/portada-user-${user_id}.${image_header[0].originalname.split('.').pop()}`
     }else if(!req.files.image_header && req.files.image){
-        dataSend.image_header=`${process.env.PUBLIC_URL}/storage/img-default/portada.jpg`
-        dataSend.image=`${process.env.PUBLIC_URL}/storage/users/${user_id}/img-portada/portada-user-${user_id}.${image[0].originalname.split('.').pop()}`
+        dataSend.image_header=`/storage/img-default/portada.jpg`
+        dataSend.image=`/storage/users/user-${user_id}/img-portada/portada-user-${user_id}.${image[0].originalname.split('.').pop()}`
     }else{
-        dataSend.image_header=`${process.env.PUBLIC_URL}/storage/users/${user_id}/img-portada/portada-user-${user_id}.${image_header[0].originalname.split('.').pop()}`
-        dataSend.image=`${process.env.PUBLIC_URL}/storage/users/${user_id}/img-portada/portada-user-${user_id}.${image[0].originalname.split('.').pop()}`
+        dataSend.image_header=`/storage/users/user-${user_id}/img-portada/portada-user-${user_id}.${image_header[0].originalname.split('.').pop()}`
+        dataSend.image=`/storage/users/user-${user_id}/img-portada/portada-user-${user_id}.${image[0].originalname.split('.').pop()}`
     }
 
     const dataUser = await profileModel.create(dataSend);
