@@ -5,10 +5,10 @@ const { handleHttpError } = require('../utils/handleError')
 const { encrypt, compare } = require('../utils/handlePassword');
 const { tokenSign } = require('../utils/handleJwt')
 const  usersModel  = require('../models/users')
+const profileModel = require('../models/profiles');
 
 
 const registerCtrl = async (req,res) => {
-
     try{
         req = matchedData(req);
         const passwordHash = await encrypt(req.password)
@@ -20,52 +20,11 @@ const registerCtrl = async (req,res) => {
             token: await tokenSign(dataUser),
             user:dataUser,
         }
-        
-
-        fs.mkdir(`./storage/users/user-${dataUser.id}`,{recursive:true}, (err) => {
-            if (err) {
-              return console.error(err);
-            }
-            console.log('Directory main created successfully!');
-        });
-
-        fs.mkdir(`./storage/users/user-${dataUser.id}/img-perfil`,{recursive:true}, (err) => {
-            if (err) {
-              return console.error(err);
-            }
-            console.log('Directory perf created successfully!');
-        });
-
-        fs.mkdir(`./storage/users/user-${dataUser.id}/img-portada`,{recursive:true}, (err) => {
-            if (err) {
-              return console.error(err);
-            }
-            console.log('Directory port created successfully!');
-        });
-
-        fs.mkdir(`./storage/users/user-${dataUser.id}/img-posts`,{recursive:true}, (err) => {
-            if (err) {
-              return console.error(err);
-            }
-            console.log('Directory posts created successfully!');
-        });
-
-        fs.mkdir(`./storage/users/user-${dataUser.id}/img-messages`,{recursive:true}, (err) => {
-            if (err) {
-              return console.error(err);
-            }
-            console.log('Directory msm created successfully!');
-        });
-
-
-        res.send({data})
-    
+        res.send({data}) 
     }catch(e){
         handleHttpError(res, "ERROR_REGISTER_USER");
         console.log(e)
     }
-
-
 }
 
 const loginCtrl = async (req,res) => {
@@ -73,7 +32,7 @@ const loginCtrl = async (req,res) => {
     try {
         req = matchedData(req);
         const user = await usersModel.findOne({ where: {email:req.email}})
-        console.log('--->'+user.email)
+        const profile = await profileModel.findOne({ where: {id_user:user.id}})
         // .select('password name role email');
         if(!user){
             handleHttpError(res, "USER_NOT_EXISTS",404);
@@ -81,7 +40,6 @@ const loginCtrl = async (req,res) => {
         }
 
         const hashPassword = user.get('password');
-        console.log('--->'+hashPassword)
         const check = await compare(req.password, hashPassword)
 
         if(!check){
@@ -92,8 +50,10 @@ const loginCtrl = async (req,res) => {
         user.set('password', undefined, {strict:false})
         const data = {
             token: await tokenSign(user),
-            user
+            user,
+            profile
         }
+
 
         res.send({data});
 
