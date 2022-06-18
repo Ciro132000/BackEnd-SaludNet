@@ -51,25 +51,25 @@ const registerProfile = async (req,res) =>{
             dataSend.image=`/storage/img-default/perfil.png`
             dataSend.image_header=`/storage/img-default/portada.jpg`
         }else if(!req.files.image && req.files.image_header){
-            const resultado = await cloudinary.uploader.upload(req.files.image_header[0].path, (error ,result)=>{
+            const resultado = await cloudinary.uploader.upload(req.files.image_header[0].path,{ public_id:`saludnet/users/user-${user_id}/portada/portada-user-${user_id}` }, (error ,result)=>{
                 console.log(error, result)
             })
             await fs.unlink(req.files.image_header[0].path)
             dataSend.image=`/storage/img-default/perfil.png`
             dataSend.image_header= resultado.url
         }else if(!req.files.image_header && req.files.image){
-            const resultado = await cloudinary.uploader.upload(req.files.image[0].path, (error ,result)=>{
+            const resultado = await cloudinary.uploader.upload(req.files.image[0].path, { public_id:`saludnet/users/user-${user_id}/perfil/perfil-user-${user_id}` },(error ,result)=>{
                 console.log(error, result)
             })
             await fs.unlink(req.files.image[0].path)
             dataSend.image_header=`/storage/img-default/portada.jpg`
             dataSend.image=resultado.url
         }else{
-            const resultado1 = await cloudinary.uploader.upload(req.files.image_header[0].path, (error ,result)=>{
+            const resultado1 = await cloudinary.uploader.upload(req.files.image_header[0].path, { public_id:`saludnet/users/user-${user_id}/portada/portada-user-${user_id}` }, (error ,result)=>{
                 console.log(error, result)
             })
             await fs.unlink(req.files.image_header[0].path)
-            const resultado2 = await cloudinary.uploader.upload(req.files.image[0].path, (error ,result)=>{
+            const resultado2 = await cloudinary.uploader.upload(req.files.image[0].path, { public_id:`saludnet/users/user-${user_id}/perfil/perfil-user-${user_id}` }, (error ,result)=>{
                 console.log(error, result)
             })
             await fs.unlink(req.files.image[0].path)
