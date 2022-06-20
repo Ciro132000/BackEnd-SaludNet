@@ -2,6 +2,8 @@ const { DataTypes } = require('sequelize');
 
 const { sequelize } = require('../config/db');
 
+const usersModel = require('./users')
+
 const Profil = sequelize.define(
     "Profiles",
     {
@@ -38,5 +40,8 @@ const Profil = sequelize.define(
         timestamps: true,
     }
 );
+
+// Profil.hasOne(usersModel, {foreignKey: 'id_user'});
+// Profil.belongsTo(usersModel, {foreignKey: 'id_user'})
 
 module.exports = Profil;

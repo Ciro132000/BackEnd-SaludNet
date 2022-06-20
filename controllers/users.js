@@ -1,11 +1,13 @@
 const { matchedData } = require('express-validator');
 require('dotenv').config();
+const { QueryTypes } = require('sequelize');
 
 const { handleHttpError } = require('../utils/handleError')
 const { encrypt, compare } = require('../utils/handlePassword');
 const { verifyToken } = require('../utils/handleJwt')
 const { cloudinary } = require('../utils/cloudinary')
 const fs =require('fs-extra')
+const { sequelize } = require('../config/db')
 
 const  usersModel  = require('../models/users')
 const profileModel = require('../models/profiles');
@@ -16,12 +18,46 @@ const getUser = async (req,res) => {
     const token = req.headers.authorization.split(' ').pop();
     const dataToken = await verifyToken(token);
 
-    const data = {
-        token: dataToken,
-        user_id:dataToken.id,
-    }
+    // const data = {
+    //     token: dataToken,
+    //     user_id:dataToken.id,
+    // }
 
-    res.send({data})
+    // const data = await usersModel.findOne(
+    //     {
+    //         where:{
+    //             id:dataToken.id
+    //         },
+    //         include:
+    //             {
+    //                 model:profileModel,
+    //                 as:'profile',
+    //                 on:{
+    //                     id_user:dataToken.id
+    //                 }
+    //             }
+            
+    //     }
+    // )
+
+    // const data = await usersModel.findAll({include: profileModel})
+
+    const [results,metadata] = await sequelize.query(
+        `SELECT Users.id AS user_id, 
+        Users.firstName, Users.lastName, 
+        Users.email, 
+        Profiles.id AS profile_id, 
+        Profiles.day_birth, 
+        Profiles.gender, 
+        Profiles.phone, 
+        Profiles.image, 
+        Profiles.image_header, 
+        Profiles.id_country 
+        FROM Users INNER JOIN Profiles ON Users.id=Profiles.id_user WHERE Users.id=${dataToken.id}`, 
+        { type: QueryTypes.SELECT }
+    )
+
+    res.send({data:results})
 }
 
 const getAllUsers = async(req,res) => {
