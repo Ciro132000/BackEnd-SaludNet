@@ -15,6 +15,9 @@ npx sequelize-cli db:migrate
 Quitar todas las migraciones:
 npx sequelize-cli db:migrate:undo:all
 
+Quitar migracion especifica
+npx sequelize-cli db:migrate:undo:all --to XXXXXXXXXXXXXX-create-posts.js
+
 Crear seeder:
 npx sequelize-cli seed:generate --name demo-user
 
