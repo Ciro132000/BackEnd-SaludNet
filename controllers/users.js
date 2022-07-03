@@ -123,4 +123,18 @@ const registerProfile = async (req,res) =>{
 
 }
 
-module.exports = { getUser, getAllUsers, registerProfile }
+const searchUser = async (req,res) => {   
+    try {
+        const dataUser = req.query.dataSearch
+        const [results,metadata] = await sequelize.query(
+            `SELECT Users.id, Users.firstName, Users.lastName, Profiles.image FROM Users 
+            INNER JOIN Profiles ON Profiles.id_user = Users.id 
+            WHERE Users.firstName LIKE "%${dataUser}%" OR Users.lastName LIKE "%${dataUser}%"`
+        );
+        res.send({data:results})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+module.exports = { getUser, getAllUsers, registerProfile, searchUser }
