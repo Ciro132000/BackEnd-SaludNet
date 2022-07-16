@@ -6,6 +6,7 @@ const { handleHttpError } = require('../utils/handleError')
 
 const  privaciesModel  = require('../models/privacies')
 
+// Mostrar los niveles de privacidad
 const privaciesLevel = async (req,res)  =>{
     try {
         const allPrivacies = await privaciesModel.findAll();

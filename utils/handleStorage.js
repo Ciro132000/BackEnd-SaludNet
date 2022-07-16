@@ -75,9 +75,28 @@ const storage = multer.diskStorage({
 })
 
 
+const storagePost = multer.diskStorage(
+    {
+        filname:function(res, file, cb){
+            // const ext = file.originalname.split('.').pop()
+            // const filename = Date.now();
+            // cb(null, `${filename}.${ext}`);
+            cb(null, file.fieldname + '-' + Date.now())
+        },
+        destination:function(res, file, cb){
+            const pathStorage = `./storage`;
+            cb(null, pathStorage)
+        }
+    }
+)
+
 const uploadMiddleware = multer({storage:storage});
 
-module.exports = uploadMiddleware
+const uploadPost = multer({storage:storagePost});
+
+module.exports = {uploadMiddleware, uploadPost}
+
+
 
 // const multer = require('multer')
 

@@ -13,34 +13,11 @@ const  usersModel  = require('../models/users')
 const profileModel = require('../models/profiles');
 
 
+// Funcion para mostrar los datos del usuario activo
 const getUser = async (req,res) => {
 
     const token = req.headers.authorization.split(' ').pop();
     const dataToken = await verifyToken(token);
-
-    // const data = {
-    //     token: dataToken,
-    //     user_id:dataToken.id,
-    // }
-
-    // const data = await usersModel.findOne(
-    //     {
-    //         where:{
-    //             id:dataToken.id
-    //         },
-    //         include:
-    //             {
-    //                 model:profileModel,
-    //                 as:'profile',
-    //                 on:{
-    //                     id_user:dataToken.id
-    //                 }
-    //             }
-            
-    //     }
-    // )
-
-    // const data = await usersModel.findAll({include: profileModel})
 
     const [results,metadata] = await sequelize.query(
         `SELECT Users.id AS user_id, 
@@ -60,11 +37,13 @@ const getUser = async (req,res) => {
     res.send({data:results})
 }
 
+// Mostar todos los usuarios
 const getAllUsers = async(req,res) => {
     const allUser = await usersModel.findAll();
     res.send({allUser})
 }
 
+// Registro de perfil
 const registerProfile = async (req,res) =>{
 
     try {
@@ -123,6 +102,7 @@ const registerProfile = async (req,res) =>{
 
 }
 
+// Buscador de usurios
 const searchUser = async (req,res) => {   
     try {
         const dataUser = req.query.dataSearch
@@ -137,4 +117,5 @@ const searchUser = async (req,res) => {
     }
 }
 
-module.exports = { getUser, getAllUsers, registerProfile, searchUser }
+
+module.exports = { getUser, getAllUsers, registerProfile, searchUser}
