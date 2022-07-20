@@ -17,16 +17,32 @@ const setPost = async (req,res) =>{
 
       //Verificando si la publicación presenta imagenes 
       if(req.files.length > 0){
+        console.log('Si hay archivos');
+        console.log(req.files)
+
         await req.files.map(async (file)=>{
 
-          const resultado = await cloudinary.uploader.upload(file.path,{ 
-            public_id:`saludnet/users/user-${req.user.id}/Posts/Post-${data.id}/Multimedia-${Date.now()}` 
-          },(error)=>{
-            console.log(error)
-          })
+          const type = (ext[0] === "image")? "0" : (ext[0] === "video")? "1": null;
+
+          let resultado;
+
+          if(type === "0"){
+            resultado = await cloudinary.uploader.upload(file.path,{ 
+              public_id:`saludnet/users/user-${req.user.id}/Posts/Post-${data.id}/Multimedia-${Date.now()}` 
+            },(error)=>{
+              console.log(error)
+            })
+          }else{
+            resultado = await cloudinary.uploader.upload(file.path,{ 
+              resource_type: "video",
+              public_id:`saludnet/users/user-${req.user.id}/Posts/Post-${data.id}/Multimedia-${Date.now()}` 
+            },(error)=>{
+              console.log(error)
+            })
+          }
+
 
           const ext = file.mimetype.split('/');
-          const type = (ext[0] === "image")? "0" : (ext[0] === "video")? "1": null;
 
           const multi = {
             multimedia:resultado.url,
@@ -38,7 +54,13 @@ const setPost = async (req,res) =>{
 
           fs.unlink(file.path)
         })
+
+
+      }else{
+        // Data para enviar en el registro de la publicación
+        console.log('nO HAY ARCHIVOS')
       }
+
 
       res.send(data)
       
