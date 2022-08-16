@@ -1,9 +1,13 @@
 const { verifyToken } = require('../utils/handleJwt')
 const { cloudinary } = require('../utils/cloudinary')
 const fs =require('fs-extra')
+const { sequelize } = require('../config/db')
 
 const  postsModel  = require('../models/posts')
+const { QueryTypes } = require('sequelize');
 
+
+// Crear una publicación
 const setPost = async (req,res) =>{
     try {
 
@@ -74,4 +78,49 @@ const setPost = async (req,res) =>{
     }
 }
 
-module.exports = { setPost }
+// Ver publicacion de un usuario
+const getPostUser = async (req, res) =>{
+  try {
+    // SELECT p.id,p.content,p.idPrivacy,p.createdAt, m.id as idMultimedia, m.multimedia, m.multimediaType FROM Posts AS p INNER JOIN PostMultimedia AS m ON p.id=m.postId WHERE p.idUser=1;
+    const { idUser } = req.query
+
+    const [data, metadata] =await sequelize.query(
+      `SELECT * FROM Posts AS p WHERE p.idUser=${idUser}`,
+    )
+
+    res.send({data})
+  } catch (error) {
+    
+  }
+}
+
+// const multi = async (id)=>{
+//   const [result, metadatad] =await sequelize.query(
+//       `SELECT * FROM PostMultimedia WHERE PostMultimedia.postId=${id}`,
+//   )
+
+//   return result[0]
+// }
+
+// Ver todas las publicaciones para un usuario
+const getAllPost = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    
+  }
+}
+
+// Mostrar Multimedia de publicación
+const multimediaPost = async (req, res) => {
+  try {
+    const data = await postsModel.postMultimedia.findAll({where:{ postId:req.params.id}});
+
+    res.send({data})
+
+  } catch (error) {
+    
+  }
+}
+
+module.exports = { setPost, getPostUser, getAllPost, multimediaPost }
