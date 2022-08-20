@@ -107,7 +107,7 @@ const searchUser = async (req,res) => {
     try {
         const dataUser = req.query.dataSearch
         const [results,metadata] = await sequelize.query(
-            `SELECT Users.id, Users.firstName, Users.lastName, Profiles.image FROM Users 
+            `SELECT Users.id, Users.firstName, Users.lastName, Users.userName, Profiles.image FROM Users 
             INNER JOIN Profiles ON Profiles.id_user = Users.id 
             WHERE Users.firstName LIKE "%${dataUser}%" OR Users.lastName LIKE "%${dataUser}%"`
         );
@@ -117,5 +117,30 @@ const searchUser = async (req,res) => {
     }
 }
 
+// Perfil de usuaruis
+const userProfile = async (req,res) =>{
+    try {
+        const userName = req.query.data;
 
-module.exports = { getUser, getAllUsers, registerProfile, searchUser}
+        const [data,metadata] = await sequelize.query(
+            `SELECT Users.id AS user_id, 
+            Users.firstName, Users.lastName, 
+            Users.email, 
+            Profiles.id AS profile_id, 
+            Profiles.day_birth, 
+            Profiles.gender, 
+            Profiles.phone, 
+            Profiles.image, 
+            Profiles.image_header, 
+            Profiles.id_country 
+            FROM Users INNER JOIN Profiles ON Users.id=Profiles.id_user WHERE Users.userName='${userName}'`, 
+            { type: QueryTypes.SELECT }
+        )
+
+        res.send({data})
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+module.exports = { getUser, getAllUsers, registerProfile, searchUser, userProfile}

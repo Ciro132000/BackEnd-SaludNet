@@ -3,7 +3,7 @@ const router = express.Router();
 const authMiddleware = require('../middleware/session');
 const {validatorRegisterProfile} = require('../validators/users')
 
-const {getUser, getAllUsers, registerProfile, searchUser, setPost} = require('../controllers/users')
+const {getUser, getAllUsers, registerProfile, searchUser, setPost, userProfile } = require('../controllers/users')
 const { uploadMiddleware } = require('../utils/handleStorage')
 
 router.get('/user',authMiddleware, getUser )
@@ -15,5 +15,7 @@ router.post('/user/profile',[authMiddleware,uploadMiddleware.fields([{name: 'ima
 
 router.get('/search', authMiddleware, searchUser)
 
+// Perfil de usuarios 
+router.get('/profile', userProfile)
 
 module.exports = router; 
