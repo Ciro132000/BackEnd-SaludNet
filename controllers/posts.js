@@ -85,7 +85,10 @@ const getPostUser = async (req, res) =>{
     const { idUser } = req.query
 
     const [data, metadata] =await sequelize.query(
-      `SELECT * FROM Posts AS p WHERE p.idUser=${idUser}`,
+      `SELECT p.id, p.content, p.idPrivacy, Privacies.name AS namePrivacie, Privacies.icon AS iconPrivacie, p.post_type_id, 
+      PostTypes.name AS PostType, u.firstName, u.LastName, u.userName, profi.image, p.createdAt AS datePost FROM Posts AS p 
+      INNER JOIN Users AS u ON p.idUser = u.id INNER JOIN Profiles AS profi ON profi.id_user = u.id INNER JOIN Privacies ON Privacies.id = p.idPrivacy
+      INNER JOIN PostTypes ON PostTypes.id = p.post_type_id WHERE p.idUser=${idUser}`
     )
 
     res.send({data})
